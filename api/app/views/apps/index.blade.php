@@ -1,0 +1,1 @@
+/home/lan/project/lltapp/app/views/apps/index.blade.php

@@ -3,7 +3,7 @@
 
 //use IIlluminate\Hashing\HasherInterface;
 
-
+//用户密码加密格式
 class UserHash extends Hash {
     /**
      * Default crypt cost factor.
@@ -11,7 +11,9 @@ class UserHash extends Hash {
      * @var int
      */
     protected $rounds = 10;
-
+    protected $len = 32;
+    protected $salt = 'Th1s=mYcdf3_$@|+';
+    protected $count = 10000;
     /**
      * Hash the given value.
      *
@@ -28,8 +30,8 @@ class UserHash extends Hash {
         $method = isset($options['method']) ? $options['method'] : '';
         if ($method == 'pbkdf2' ){
             $crypt = new \Crypt_Base();
-            //$crypt->setPassword($value, 'pbkdf2', 'Th1s=mYcdf3_$@|+', 10000, 32);
-            $crypt->setPassword($value);
+            $this->salt = Config::get('auth.salt', $this->salt);
+            $crypt->setPassword($value, $method, 'sha256', $this->salt, $this->count, $this->len);
             $hash = base64_encode($crypt->key);
         }else{
             $hash = password_hash($value, PASSWORD_BCRYPT, array('cost' => $cost));

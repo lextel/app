@@ -11,9 +11,10 @@ class UserController extends \BaseController {
     {
         //检测是否已经登录
         if (Auth::check()){
-            return Redirect::to('/');
+            $res = ['code'=>2, 'msg'=>'已经登录'];
+            return Response::json($res);
         }
-        $res = ['code'=>1, 'msg'=>'输入账号/密码格式不符合'];
+        $res = ['code'=>0, 'msg'=>'去登录'];
         return Response::json($res);
     }
 
@@ -23,20 +24,25 @@ class UserController extends \BaseController {
      *
      */
     public function signIn()
-    {
+    {       
+        //检测是否已经登录
+        if (Auth::check()){
+            $res = ['code'=>2, 'msg'=>'已经登录'];
+            return Response::json($res);
+        }
+        $member = new Member();
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
         //验证输入是否符合格式
-        $validator = Validator::make(
-        [
-            'username' => $username,
-            'password' => $password,
-        ],[
-            'username' => 'required',
-            'password' => 'required|min:6|max:20',
-        ]);
+        $validator = $member->validateSignIn($username, $password);
         if ($validator->fails()){
-            $res = ['code'=>1, 'msg'=>'输入账号/密码格式不符合'];
+            $msg = '';
+            $messages = $validator->messages();
+            foreach ($messages->all(':message') as $message){
+                $msg = $message;
+                break;
+            }
+            $res = ['code'=>1, 'msg'=>$msg];
             return Response::json($res);
         }
         //验证是否在数据库
@@ -45,9 +51,8 @@ class UserController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'账户不存在'];
             return Response::json($res);
         }
-        //验证密码是否正确,改动check
-        $userhash = new UserHash();
-        if ($userhash->hashmake($password, ['method'=>'pbkdf2']) == $user->password){
+        //验证密码是否正确,改动check        
+        if ($member->setPassword($password) == $user->password){
             Auth::login($user);
             $res = ['code'=>0, 'msg'=>'登录成功'];
             return Response::json($res);
@@ -67,7 +72,8 @@ class UserController extends \BaseController {
         if (Auth::check()){
             return Redirect::to('/');
         }
-        return View::make('signup');
+        $res = ['code'=>0, 'msg'=>'去注册'];
+        return Response::json($res);
     }
 
     /**
@@ -75,44 +81,29 @@ class UserController extends \BaseController {
      */
     public function signUp()
     {
+        //检测是否已经登录
+        if (Auth::check()){
+            $res = ['code'=>2, 'msg'=>'已经登录'];
+            return Response::json($res);
+        }
+        $member = new Member();
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
         $nickname = trim(Input::get('nickname'));
-        //验证是否符合格式
-        $validator = Validator::make(
-        [
-            'username' => $username,
-            'password' => $password,
-            'nickname' => $nickname,
-        ],[
-            'username' => 'required',
-            'password' => 'required|min:6|max:20',
-            'nickname' => 'required|min:2|max:8',
-        ]);
+        $validator = $member->validateSignUp($username, $password, $nickname);
         if ($validator->fails()){
-            $res = ['code'=>1, 'msg'=>'输入不符合格式'];
+            $msg = '';
+            $messages = $validator->messages();
+            foreach ($messages->all(':message') as $message){
+                $msg = $message;
+                break;
+            }
+            $res = ['code'=>1, 'msg'=>$msg];
             return Response::json($res);
         }
-        //验证是否存在username
-        if (Member::where('username', '=', $username)->first()){
-            $res = ['code'=>1, 'msg'=>'您注册的账户已经存在'];
-            return Response::json($res);
-        }
-        //验证是否有昵称
-        if (Member::where('nickname', '=', $nickname)->first()){
-            $res = ['code'=>1, 'msg'=>'您注册的昵称已经存在'];
-            return Response::json($res);
-        }
-        $userhash = new UserHash();
-        Member::create([
-          'username' => $username,
-          'password' => $userhash->hashmake($password, ['method'=>'pbkdf2']),   // 生成密码.
-          'email' => $username,
-          'nickname' => $nickname,
-        ]);
-
+        //保存
+        $member->createMember($username, $password, $nickname);       
         $user = User::where('username', '=', $username)->first();
-
         if (! $user){
             $res = ['code'=>1, 'msg'=>'用户不存在'];
             return Response::json($res);
@@ -133,5 +124,4 @@ class UserController extends \BaseController {
         Auth::logout();
         return Redirect::to('/');
     }
-
 }

@@ -8,6 +8,6 @@ class Applog extends \Eloquent {
 	];
 
 	// Don't forget to fill this array
-	protected $fillable = [];
+	protected $fillable = ['id', 'app_id', 'award', 'status', 'member_id', 'imei', ];
 
 }

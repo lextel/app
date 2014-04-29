@@ -3,14 +3,30 @@
 class AppsController extends \BaseController {
 
     /**
-     * Display a listing of apps
+     * 匹配APP是否已经安装的列表
      *
      * @return Response
      */
-    public function index()
+    public function index($pn=0)
     {
-        $apps = Apps::all();
-        return View::make('apps.index', compact('apps'));
+	    $imei = '';
+	    //$count = Apps::where('imei', '=', $imei)->count();
+	    //检测是否已经安装了
+        $logs = Applog::select('app_id')
+            ->where('imei', '=', $imei)
+            ->orwhere('status', '=', '0')
+            ->get()->toArray();
+	    //获得剩余的
+	    $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')
+	            ->where('id', 'not in', $logs)
+	            ->orwhere('is_delete', '=', '0')
+	            ->get()->toArray();
+	    foreach($apps as &$row){
+	         $row['images'] = date("Y-m-d H:i", $row['images']);
+	    }
+	    $data = ['apps'=>$apps, 'count'=>0];
+	    $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
+	    return Response::json($res);
     }
 
     /**

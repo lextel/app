@@ -8,6 +8,6 @@ class Apps extends \Eloquent {
     ];
 
     // Don't forget to fill this array
-    protected $fillable = [];
+    protected $fillable = ['id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link'];
 
 }

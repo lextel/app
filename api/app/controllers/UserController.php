@@ -33,6 +33,12 @@ class UserController extends \BaseController {
         $member = new Member();
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
+        $imei = trim(Input::get('imei', ''));
+        
+        if (empty($imei)){
+            $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
+            return Response::json($res); 
+        }
         //验证输入是否符合格式
         $validator = $member->validateSignIn($username, $password);
         if ($validator->fails()){
@@ -45,20 +51,53 @@ class UserController extends \BaseController {
             $res = ['code'=>1, 'msg'=>$msg];
             return Response::json($res);
         }
-        //验证是否在数据库
-        $user = User::where('username', '=', $username)->first();
+        //验证用户是否在数据库
+        $user = User::where('username', '=', $username)
+                      ->where('is_disable', '=', 0)
+                      ->where('is_delete', '=', 0)->first();
         if (! $user){
             $res = ['code'=>1, 'msg'=>'账户不存在'];
             return Response::json($res);
         }
-        //验证密码是否正确,改动check        
-        if ($member->setPassword($password) == $user->password){
-            Auth::login($user);
-            $res = ['code'=>0, 'msg'=>'登录成功'];
-            return Response::json($res);
+        //验证密码是否正确,改动check
+        if ($member->setPassword($password) != $user->password){
+            $res = ['code'=>1, 'msg'=>'用户密码错误'];
+            return Response::json($res);           
         }
-        $res = ['code'=>1, 'msg'=>'用户密码错误'];
+        //登录
+        Auth::login($user);
+        //结算本次登录的机器的 功能需要剥离下
+        $logs = Applog::select('id', 'award')
+                            ->where('imei', '=', $imei)
+                            ->where('status', '=', 0)->get()->toArray();
+        $addPoints = 0;
+        $ids = [];
+        //这地方需要改进下//更改日志记录-减少请求次数
+        foreach($logs as $index){
+            $addPoints += intval($index['award']);
+            $ids[] = $index['id'];
+            $log = Applogs::find($index['id']);
+            $log->status = 1;
+            $log->member_id = $user->id;
+            $log->save();
+        }
+        //结算
+        if ($addPoints > 0){
+            $user->points += $addPoints;
+            $user->save();
+            //记录明细
+            Moneylog::create([
+                'phase_id'  => 0,
+                'total'     => $addPoints / Config::get('common.point', 100),
+                'sum'       => $addPoints,
+                'type'      => 3,
+                'source'    => 'APP下载',
+                'member_id' => $user->id,
+            ]);
+            }
+        $res = ['code'=>0, 'msg'=>'登录成功'];
         return Response::json($res);
+        
     }
 
     /**

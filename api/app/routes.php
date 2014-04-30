@@ -23,9 +23,11 @@ Route::group(['prefix' => '/'], function() {
     Route::post('signup', 'UserController@signUp');
     Route::get('signout', 'UserController@signOut');
 });
-Route::resource('applog', 'ApplogsController');
-Route::resource('market', 'AppsController');
+Route::get('applog', 'ApplogsController@index');
+Route::get('applog/index', 'ApplogsController@index');
+Route::post('applog/create', 'ApplogsController@create');
 
+Route::post('apps', 'AppsController@index');
 
 Event::listen('illuminate.query', function($sql)
 {

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'All' => $baseDir . '/app/database/migrations/2014_05_04_150106_all.php',
     'Applog' => $baseDir . '/app/models/Applog.php',
     'ApplogsController' => $baseDir . '/app/controllers/ApplogsController.php',
     'ApplogsTableSeeder' => $baseDir . '/app/database/seeds/ApplogsTableSeeder.php',
@@ -610,6 +611,7 @@ return array(
     'Jeremeamia\\SuperClosure\\Visitor\\MagicConstantVisitor' => $vendorDir . '/jeremeamia/SuperClosure/src/Jeremeamia/SuperClosure/Visitor/MagicConstantVisitor.php',
     'Math_BigInteger' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Math/BigInteger.php',
     'Member' => $baseDir . '/app/models/Member.php',
+    'Moneylog' => $baseDir . '/app/models/Moneylog.php',
     'Monolog\\ErrorHandler' => $vendorDir . '/monolog/monolog/src/Monolog/ErrorHandler.php',
     'Monolog\\Formatter\\ChromePHPFormatter' => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
     'Monolog\\Formatter\\ElasticaFormatter' => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ElasticaFormatter.php',

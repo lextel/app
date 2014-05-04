@@ -16,6 +16,8 @@ class CreateApplogsTable extends Migration {
             Schema::create($this->table, function(Blueprint $table) {
                 $table->increments('id');
                 $table->integer('app_id');
+                $table->string('package')->index();
+                $table->string('title');
                 $table->integer('award');
                 $table->integer('status')->default(0);
                 $table->integer('member_id')->default(0);

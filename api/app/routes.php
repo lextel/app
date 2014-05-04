@@ -13,19 +13,18 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+    return View::make('hello');
 });
 Route::group(['prefix' => '/'], function() {
     //用户注册\登录功能
-    Route::get('signin', 'UserController@getSignIn');
+    //Route::get('signin', 'UserController@getSignIn');
     Route::post('signin', 'UserController@signIn');
-    Route::get('signup', 'UserController@getSignUp');
-    Route::post('signup', 'UserController@signUp');
+    //Route::get('signup', 'UserController@getSignUp');
+    //Route::post('signup', 'UserController@signUp');
     Route::get('signout', 'UserController@signOut');
 });
 Route::get('applog', 'ApplogsController@index');
-Route::get('applog/index', 'ApplogsController@index');
-Route::post('applog/create', 'ApplogsController@create');
+Route::post('applog', 'ApplogsController@create');
 
 Route::post('apps', 'AppsController@index');
 

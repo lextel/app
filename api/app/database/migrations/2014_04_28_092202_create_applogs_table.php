@@ -21,6 +21,7 @@ class CreateApplogsTable extends Migration {
                 $table->integer('award');
                 $table->integer('status')->default(0);
                 $table->integer('member_id')->default(0);
+                $table->string('username')->default('');
                 $table->integer('imei');
                 $table->timestamps();
             });

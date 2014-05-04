@@ -27,6 +27,7 @@ class CreateAppsTable extends Migration {
                 $table->string('link');
                 $table->integer('os')->default(0);
                 $table->string('size');
+                $table->timestamps();
             });
         }
         //增加新列

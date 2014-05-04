@@ -14,7 +14,7 @@ class AppsController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
             return Response::json($res);
         }
-        $installedApps = trim(Input::get('apps', []));
+        $installedApps = Input::get('apps', []);
         //检测是否已经安装了
         $logs = Applog::select('package')
             ->where('imei', '=', $imei)

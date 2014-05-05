@@ -97,7 +97,6 @@ class UserController extends \BaseController {
             }
         $res = ['code'=>0, 'msg'=>'登录成功'];
         return Response::json($res);
-
     }
 
     /**

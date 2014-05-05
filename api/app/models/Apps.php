@@ -8,6 +8,9 @@ class Apps extends \Eloquent {
     ];
 
     // Don't forget to fill this array
-    protected $fillable = ['id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link'];
-
+     protected $fillable = ['id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link'];
+     //
+     protected function getDateFormat(){
+        return time();
+    }
 }

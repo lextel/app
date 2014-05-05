@@ -75,9 +75,10 @@ class UserController extends \BaseController {
         foreach($logs as $index){
             $addPoints += intval($index['award']);
             $ids[] = $index['id'];
-            $log = Applogs::find($index['id']);
+            $log = Applog::find($index['id']);
             $log->status = 1;
             $log->member_id = $user->id;
+            $log->username = $user->username;
             $log->save();
         }
         //结算

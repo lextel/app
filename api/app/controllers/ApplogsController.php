@@ -26,9 +26,9 @@ class ApplogsController extends \BaseController {
                 ->skip($pn)
                 ->get()->toArray();
         }
-
         foreach($logs as &$row){
-             $row['created_at'] = date("Y-m-d H:i", $row['created_at']);
+             //$row['created_at'] = date("Y-m-d H:i", $row['created_at']);
+            $row['created_at'] = $row['created_at'];
         }
         $data = ['logs'=>$logs, 'count'=>$count];
         $res = ['code'=>0, 'msg'=>'OK', 'data'=>$data];
@@ -47,6 +47,7 @@ class ApplogsController extends \BaseController {
         $package = trim(Input::get('package', ''));
         $award = 0;
         $member_id = 0;
+        $username = '';
         $status = 0;
         $logined = false;
         if (empty($imei)){
@@ -73,7 +74,8 @@ class ApplogsController extends \BaseController {
         //已登录
         if (Auth::check()){
             $user = Auth::user();
-            $member_id = $user->member_id;
+            $member_id = $user->id;
+            $username = $user->username;
             $status = 1;
             $logined = true;
         }
@@ -86,6 +88,7 @@ class ApplogsController extends \BaseController {
                     'status' => $status,
                     'award' => $award,
                     'member_id' => $member_id,
+                    'username' => $username,
                     ]);
         //登录了立马结算
         if ($logined){

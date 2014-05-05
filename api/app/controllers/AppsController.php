@@ -20,7 +20,6 @@ class AppsController extends \BaseController {
             return Response::json($res);
         }
         //检测是否已经安装了
-
         $logs = Applog::select('package')
             ->where('imei', '=', $imei)
             ->get()->toArray();

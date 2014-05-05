@@ -15,14 +15,22 @@ class AppsController extends \BaseController {
             return Response::json($res);
         }
         $installedApps = Input::get('apps', []);
+        if (!is_array($installedApps)){
+             $res = ['code'=>1, 'msg'=>'apps type must is array'];
+            return Response::json($res);
+        }
         //检测是否已经安装了
+
         $logs = Applog::select('package')
             ->where('imei', '=', $imei)
             ->get()->toArray();
-
+        $logsTmp = [];
+        foreach ($logs as $index) {
+            $logsTmp[] = $index['package'];
+        }
         //获得剩余的
         if (empty($installedApps)) $installedApps = [];
-        $logs = array_unique(array_merge($logs, $installedApps));
+        $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
         if (!empty($logs)){
             $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')

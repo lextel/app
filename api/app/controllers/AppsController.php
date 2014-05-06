@@ -9,7 +9,6 @@ class AppsController extends \BaseController {
      */
     public function index()
     {
-        header("Access-Control-Allow-Origin：*");
         $imei = trim(Input::get('imei', ''));
         if (empty($imei)){
             $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];

@@ -9,7 +9,6 @@ class ApplogsController extends \BaseController {
      */
     public function index()
     {
-        header("Access-Control-Allow-Origin：*");
         if (! Auth::check()){
             $res = ['code'=>1, 'msg'=>'请登陆'];
             return Response::json($res);
@@ -43,7 +42,6 @@ class ApplogsController extends \BaseController {
      */
     public function create()
     {
-        header("Access-Control-Allow-Origin：*");
         //如何验证APPID的有效性是个问题
         $imei = trim(Input::get('imei', ''));
         $package = trim(Input::get('package', ''));

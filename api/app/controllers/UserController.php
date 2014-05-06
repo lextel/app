@@ -25,6 +25,7 @@ class UserController extends \BaseController {
      */
     public function signIn()
     {
+        header("Access-Control-Allow-Origin：*");
         //检测是否已经登录
         if (Auth::check()){
             $res = ['code'=>2, 'msg'=>'已经登录'];
@@ -159,7 +160,10 @@ class UserController extends \BaseController {
      */
     public function signOut()
     {
+        header("Access-Control-Allow-Origin：*");
         Auth::logout();
-        return Redirect::to('/');
+        //return Redirect::to('/');
+        $res = ['code'=>0, 'msg'=>'注册成功'];
+        return Response::json($res);
     }
 }

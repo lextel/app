@@ -11,6 +11,8 @@
 |
 */
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, Content-Language, Cache-Control, X-E4M-With");
+header("Access-Control-Allow-Methods : GET, POST, OPTIONS");
 Route::get('/', function()
 {
     return View::make('hello');

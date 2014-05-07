@@ -11,8 +11,9 @@
 |
 */
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, Content-Language, Cache-Control, X-E4M-With");
-header("Access-Control-Allow-Methods : GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, No-Cache, X-Requested-With, Content-Type, Accept");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
 Route::get('/', function()
 {
     return View::make('hello');
@@ -20,15 +21,15 @@ Route::get('/', function()
 Route::group(['prefix' => '/'], function() {
     //用户注册\登录功能
     //Route::get('signin', 'UserController@getSignIn');
-    Route::post('signin', 'UserController@signIn');
+    Route::post('signin', ['before' => 'csrf', 'uses' => 'UserController@signIn']);
     //Route::get('signup', 'UserController@getSignUp');
     //Route::post('signup', 'UserController@signUp');
     Route::get('signout', 'UserController@signOut');
 });
 Route::get('applog', 'ApplogsController@index');
-Route::post('applog', 'ApplogsController@create');
+Route::post('applog', ['before' => 'csrf', 'uses' => 'ApplogsController@create']);
 
-Route::post('apps', 'AppsController@index');
+Route::post('apps', ['before' => 'csrf', 'uses' => 'AppsController@index']);
 
 Event::listen('illuminate.query', function($sql)
 {

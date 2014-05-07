@@ -9,6 +9,11 @@ class AppsController extends \BaseController {
      */
     public function index()
     {
+        $rawpostdata = file_get_contents("php://input");
+        $post = json_decode($rawpostdata, true);
+        foreach ($post as $key => $value) {
+            # code...
+        }
         $imei = trim(Input::get('imei', ''));
         if (empty($imei)){
             $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];

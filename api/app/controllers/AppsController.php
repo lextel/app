@@ -9,11 +9,6 @@ class AppsController extends \BaseController {
      */
     public function index()
     {
-        $rawpostdata = file_get_contents("php://input");
-        $post = json_decode($rawpostdata, true);
-        foreach ($post as $key => $value) {
-            # code...
-        }
         $imei = trim(Input::get('imei', ''));
         if (empty($imei)){
             $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
@@ -33,18 +28,20 @@ class AppsController extends \BaseController {
             $logsTmp[] = $index['package'];
         }
         //获得剩余的
+
         if (empty($installedApps)) $installedApps = [];
         $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
-        if (!empty($logs)){
-            $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')
+         Log::info(count($logs));
+         if (empty($logs)) $logs = [0];
+        $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')
                     ->whereNotIn('package', $logs)
                     ->where('is_delete', '=', '0')
                     ->get()->toArray();
-            foreach($apps as &$row){
-                 $row['images'] = unserialize($row['images']);
-            }
+        foreach($apps as &$row){
+             $row['images'] = unserialize($row['images']);
         }
+
         $data = ['apps'=>$apps, 'count'=>count($apps)];
         $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
         return Response::json($res);

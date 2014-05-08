@@ -12,7 +12,7 @@ class ApplogsController extends \BaseController {
         //检测TOKEN
         $token = trim(Input::get('token', ''));
         if (empty($token)){
-            $res = ['code'=>1, 'msg'=>'请出入TOKEN'];
+            $res = ['code'=>1, 'msg'=>'请输入TOKEN'];
             return Response::json($res);
         };
         $tokenClass = new TokenClass;
@@ -64,6 +64,7 @@ class ApplogsController extends \BaseController {
         //检测该APPID是否存在
         $appInfo = Apps::where('package', '=', $package)
                       ->where('is_delete', '=', 0)
+                      ->where('status', '=', '1')
                       ->first();
         if (empty($appInfo)){
             $res = ['code'=>1, 'msg'=>'不存在该APP'];

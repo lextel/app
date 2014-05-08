@@ -35,6 +35,7 @@ class AppsController extends \BaseController {
         $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')
                     ->whereNotIn('package', $logs)
                     ->where('is_delete', '=', '0')
+                    ->where('status', '=', '1')
                     ->get()->toArray();
         foreach($apps as &$row){
              $row['images'] = unserialize($row['images']);

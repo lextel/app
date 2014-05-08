@@ -127,7 +127,7 @@ class UserController extends \BaseController {
         //检测TOKEN
         $token = trim(Input::get('token', ''));
         if (empty($token)){
-            $res = ['code'=>1, 'msg'=>'请出入TOKEN'];
+            $res = ['code'=>1, 'msg'=>'请输入TOKEN'];
             return Response::json($res);
         };
         $tokenClass = new TokenClass;

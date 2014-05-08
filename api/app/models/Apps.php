@@ -6,7 +6,7 @@ class Apps extends \Eloquent {
     public static $rules = [
         // 'title' => 'required'
     ];
-
+    protected $table = 'apps';
     // Don't forget to fill this array
      protected $fillable = ['id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link'];
      //

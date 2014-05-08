@@ -22,7 +22,7 @@ class CreateApplogsTable extends Migration {
                 $table->integer('status')->default(0);
                 $table->integer('member_id')->default(0);
                 $table->string('username')->default('');
-                $table->integer('imei');
+                $table->string('imei');
                 $table->integer('created_at')->default(0);
                 $table->integer('updated_at')->default(0);
             });

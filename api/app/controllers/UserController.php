@@ -1,23 +1,6 @@
 <?php
 
 class UserController extends \BaseController {
-
-    /**
-     *
-     *打开登录页面
-     *
-     */
-    public function getSignIn()
-    {
-        //检测是否已经登录
-        if (Auth::check()){
-            $res = ['code'=>2, 'msg'=>'已经登录'];
-            return Response::json($res);
-        }
-        $res = ['code'=>0, 'msg'=>'去登录'];
-        return Response::json($res);
-    }
-
     /**
      *
      * 登录验证
@@ -25,12 +8,6 @@ class UserController extends \BaseController {
      */
     public function signIn()
     {
-        header("Access-Control-Allow-Origin：*");
-        //检测是否已经登录
-        if (Auth::check()){
-            $res = ['code'=>2, 'msg'=>'已经登录'];
-            return Response::json($res);
-        }
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
         $imei = trim(Input::get('imei', ''));
@@ -52,7 +29,7 @@ class UserController extends \BaseController {
             return Response::json($res);
         }
         //验证用户是否在数据库
-        $user = User::where('username', '=', $username)
+        $user = Member::where('username', '=', $username)
                       ->where('is_disable', '=', 0)
                       ->where('is_delete', '=', 0)->first();
         if (! $user){
@@ -65,7 +42,9 @@ class UserController extends \BaseController {
             return Response::json($res);
         }
         //登录
-        Auth::login($user);
+        //Auth::login($user);
+        $token = new TokenClass;
+        $apptoken = $token->create($user);
         //结算本次登录的机器的 功能需要剥离下
         $logs = Applog::select('id', 'award')
                             ->where('imei', '=', $imei)
@@ -96,22 +75,7 @@ class UserController extends \BaseController {
                 'member_id' => $user->id,
             ]);
             }
-        $res = ['code'=>0, 'msg'=>'登录成功'];
-        return Response::json($res);
-    }
-
-    /**
-     *
-     *  打开注册页面
-     *
-     */
-    public function getSignUp()
-    {
-        //检测是否已经登录
-        if (Auth::check()){
-            return Redirect::to('/');
-        }
-        $res = ['code'=>0, 'msg'=>'去注册'];
+        $res = ['code'=>0, 'msg'=>'登录成功', 'token'=>$apptoken];
         return Response::json($res);
     }
 
@@ -160,10 +124,15 @@ class UserController extends \BaseController {
      */
     public function signOut()
     {
-        header("Access-Control-Allow-Origin：*");
-        Auth::logout();
-        //return Redirect::to('/');
-        $res = ['code'=>0, 'msg'=>'注册成功'];
+        //检测TOKEN
+        $token = trim(Input::get('token', ''));
+        if (empty($token)){
+            $res = ['code'=>1, 'msg'=>'请出入TOKEN'];
+            return Response::json($res);
+        };
+        $tokenClass = new TokenClass;
+        $tokenClass->delete($token);
+        $res = ['code'=>0, 'msg'=>'退出成功'];
         return Response::json($res);
     }
 }

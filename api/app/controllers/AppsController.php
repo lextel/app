@@ -28,12 +28,10 @@ class AppsController extends \BaseController {
             $logsTmp[] = $index['package'];
         }
         //获得剩余的
-
         if (empty($installedApps)) $installedApps = [];
         $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
-         Log::info(count($logs));
-         if (empty($logs)) $logs = [0];
+        if (empty($logs)) $logs = [0];
         $apps = Apps::select('id', 'package', 'title', 'icon', 'award', 'size', 'images', 'summary', 'link')
                     ->whereNotIn('package', $logs)
                     ->where('is_delete', '=', '0')

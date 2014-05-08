@@ -9,12 +9,19 @@ class ApplogsController extends \BaseController {
      */
     public function index()
     {
-        if (! Auth::check()){
+        //检测TOKEN
+        $token = trim(Input::get('token', ''));
+        if (empty($token)){
+            $res = ['code'=>1, 'msg'=>'请出入TOKEN'];
+            return Response::json($res);
+        };
+        $tokenClass = new TokenClass;
+        $user = $tokenClass->check($token);
+        if (! $user){
             $res = ['code'=>1, 'msg'=>'请登陆'];
             return Response::json($res);
         }
         $pn = trim(Input::get('pn', 0));
-        $user = Auth::getUser();
         $userId = $user->id;
         $count = Applog::where('member_id', '=', $userId)->count();
         $logs = [];
@@ -72,8 +79,9 @@ class ApplogsController extends \BaseController {
         }
         $award = intval($appInfo->award);
         //已登录
-        if (Auth::check()){
-            $user = Auth::user();
+        $token = new TokenClass;
+        $user = $token->check();
+        if ($user){
             $member_id = $user->id;
             $username = $user->username;
             $status = 1;

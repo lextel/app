@@ -27,7 +27,6 @@ class CreateAppsTable extends Migration {
                 $table->string('link');
                 $table->integer('os')->default(0);
                 $table->string('size');
-                //$table->timestamps();
                 $table->integer('created_at')->default(0);
                 $table->integer('updated_at')->default(0);
             });

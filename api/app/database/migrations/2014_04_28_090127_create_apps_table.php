@@ -49,7 +49,7 @@ class CreateAppsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop($this->table);
+        //Schema::drop($this->table);
     }
 
 }

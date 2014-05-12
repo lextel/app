@@ -15,16 +15,20 @@ class AppsController extends \BaseController {
              $res = ['code'=>1, 'msg'=>'apps是必须的，或者不能为空'];
             return Response::json($res);
         }
+        //先检测本机现有的已经安装了的APP，并记录到表
+        if (empty($installedApps)) $installedApps = [];
+        foreach($installedApps as $app){
+            Appexist::firstOrCreate(['package'=>$app, 'imei'=>$imei]);
+        }
         //检测是否已经安装了
-        $logs = Applog::select('package')
+        $apps = Appexist::select('package')
             ->where('imei', '=', $imei)
             ->get()->toArray();
         $logsTmp = [];
-        foreach ($logs as $index) {
+        foreach ($apps as $index) {
             $logsTmp[] = $index['package'];
         }
-        //获得剩余的
-        if (empty($installedApps)) $installedApps = [];
+        //获得剩余的        
         $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
         if (empty($logs)) $logs = [0];

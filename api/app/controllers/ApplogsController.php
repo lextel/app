@@ -99,6 +99,8 @@ class ApplogsController extends \BaseController {
                     'member_id' => $member_id,
                     'username' => $username,
                     ]);
+        //
+        Appexist::firstOrCreate(['package'=>$appInfo->package, 'imei'=>$imei]);
         //登录了立马结算
         if ($logined){
             $user->points += intval($award);

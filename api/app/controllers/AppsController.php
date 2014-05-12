@@ -52,12 +52,13 @@ class AppsController extends \BaseController {
                             ->where('imei', '=', $imei)
                             ->where('status', '=', 0)->get()->toArray();
         $amount = 0;
-        $ids = [];
-        //这地方需要改进下//更改日志记录-减少请求次数
         foreach($logs as $index){
             $amount += $index['award'];
         }
-        $data = ['amount'=>$amount];
+        //分开计算金币和银币        
+        $gold = intval($amount / Config::get('common.point', 100));
+        $silver = $amount % Config::get('common.point', 100);
+        $data = ['gold'=>$gold, 'silver'=>$silver];
         $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }

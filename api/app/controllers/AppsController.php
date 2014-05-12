@@ -9,14 +9,10 @@ class AppsController extends \BaseController {
      */
     public function index()
     {
-        $imei = trim(Input::get('imei', ''));
-        if (empty($imei)){
-            $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
-            return Response::json($res);
-        }
-        $installedApps = Input::get('apps', []);
+        $imei = trim(Input::get('imei', ''));       
+        $installedApps = Input::get('apps');
         if (!is_array($installedApps)){
-             $res = ['code'=>1, 'msg'=>'apps type must is array'];
+             $res = ['code'=>1, 'msg'=>'apps是必须的，或者不能为空'];
             return Response::json($res);
         }
         //检测是否已经安装了
@@ -42,6 +38,26 @@ class AppsController extends \BaseController {
         }
 
         $data = ['apps'=>$apps, 'count'=>count($apps)];
+        $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
+        return Response::json($res);
+    }
+    
+    /*
+    * 获得APP市场的剩余的未使用的余额，登录后会清零
+    */
+    public function amount()
+    {
+        $imei = trim(Input::get('imei', ''));
+        $logs = Applog::select('id', 'award')
+                            ->where('imei', '=', $imei)
+                            ->where('status', '=', 0)->get()->toArray();
+        $amount = 0;
+        $ids = [];
+        //这地方需要改进下//更改日志记录-减少请求次数
+        foreach($logs as $index){
+            $amount += $index['award'];
+        }
+        $data = ['amount'=>$amount];
         $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }

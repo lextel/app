@@ -49,10 +49,12 @@ Route::group(['prefix' => '/'], function() {
     //Route::post('signup', 'UserController@signUp');
     Route::get('signout', ['uses' => 'UserController@signOut']);
 });
-Route::get('applog', ['before' => 'token|imei', 'uses' =>'ApplogsController@index']);
+Route::get('applog', ['before' => 'imei', 'uses' =>'ApplogsController@index']);
 Route::post('applog', ['before' => 'postForm', 'uses' => 'ApplogsController@create']);
 
-Route::post('apps', ['before' => 'postForm', 'uses' => 'AppsController@index']);
+Route::post('apps', ['before' => 'postForm|imei', 'uses' => 'AppsController@index']);
+
+Route::get('amount', ['before' => 'imei', 'uses' =>'AppsController@amount']);
 
 Event::listen('illuminate.query', function($sql)
 {

@@ -9,7 +9,7 @@ class AppsController extends \BaseController {
      */
     public function index()
     {
-        $imei = trim(Input::get('imei', ''));       
+        $imei = trim(Input::get('imei', ''));
         $installedApps = Input::get('apps');
         if (!is_array($installedApps)){
              $res = ['code'=>1, 'msg'=>'apps是必须的，或者不能为空'];
@@ -28,7 +28,7 @@ class AppsController extends \BaseController {
         foreach ($apps as $index) {
             $logsTmp[] = $index['package'];
         }
-        //获得剩余的        
+        //获得剩余的
         $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
         if (empty($logs)) $logs = [0];
@@ -45,7 +45,7 @@ class AppsController extends \BaseController {
         $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }
-    
+
     /*
     * 获得APP市场的剩余的未使用的余额，登录后会清零
     */
@@ -59,10 +59,10 @@ class AppsController extends \BaseController {
         foreach($logs as $index){
             $amount += $index['award'];
         }
-        //分开计算金币和银币        
+        //分开计算金币和银币
         $gold = intval($amount / Config::get('common.point', 100));
         $silver = $amount % Config::get('common.point', 100);
-        $data = ['gold'=>$gold, 'silver'=>$silver];
+        $data = ['gold'=>$gold, 'silver'=>$silver, 'amount'=>$amount];
         $res = ['code'=>0,'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }

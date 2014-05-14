@@ -13,28 +13,6 @@
 //头部跨域设置
 header("Access-Control-Allow-Origin: *");
 
-//适应angularjs POST格式参数FORM-DATA
-Route::filter('postForm', function()
-{
-    $imei = trim(Input::get('imei', ''));
-    if (empty($imei)){
-        $rawpostdata = file_get_contents("php://input");
-        $post = json_decode($rawpostdata, true);
-        Input::merge($post);
-    }
-});
-
-//检测是否是手机的
-Route::filter('imei', function()
-{
-    $imei = trim(Input::get('imei', ''));
-    if (empty($imei)){
-        $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
-        return Response::json($res);
-    }
-});
-
-
 
 Route::get('/', function()
 {
@@ -44,17 +22,21 @@ Route::get('/', function()
 Route::group(['prefix' => '/'], function() {
     //用户注册\登录功能
     //Route::get('signin', 'UserController@getSignIn');
-    Route::post('signin', ['before' => 'postForm', 'uses' => 'UserController@signIn']);
+    Route::post('signin', ['before' => 'postForm|imei', 'uses' => 'UserController@signIn']);
     //Route::get('signup', 'UserController@getSignUp');
     //Route::post('signup', 'UserController@signUp');
-    Route::get('signout', ['uses' => 'UserController@signOut']);
+    Route::get('signout', ['before' => 'imei|token', 'uses' => 'UserController@signOut']);
+    Route::get('userinfo', ['before' => 'imei|token', 'uses' => 'UserController@userInfo']);
 });
 Route::get('applog', ['before' => 'imei', 'uses' =>'ApplogsController@index']);
-Route::post('applog', ['before' => 'postForm', 'uses' => 'ApplogsController@create']);
+//Route::post('applog', ['before' => 'postForm|imei', 'uses' => 'ApplogsController@create']);
 
 Route::post('apps', ['before' => 'postForm|imei', 'uses' => 'AppsController@index']);
 
 Route::get('amount', ['before' => 'imei', 'uses' =>'AppsController@amount']);
+
+Route::get('operate', ['before' => 'imei', 'uses' =>'ApplogsController@download']);
+Route::post('operate', ['before' => 'postForm|imei', 'uses' =>'ApplogsController@operate']);
 
 Event::listen('illuminate.query', function($sql)
 {

@@ -78,3 +78,33 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+//适应angularjs POST格式参数FORM-DATA
+Route::filter('postForm', function()
+{
+    $imei = trim(Input::get('imei', ''));
+    if (empty($imei)){
+        $rawpostdata = file_get_contents("php://input");
+        $post = json_decode($rawpostdata, true);
+        Input::merge($post);
+    }
+});
+
+//检测是否是手机的
+Route::filter('imei', function()
+{
+    $imei = trim(Input::get('imei', ''));
+    if (empty($imei)){
+        $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
+        return Response::json($res);
+    }
+});
+//
+Route::filter('token', function()
+{
+    $token = trim(Input::get('token', ''));
+    if (empty($token)){
+        $res = ['code'=>1, 'msg'=>'请输入TOKEN'];
+        return Response::json($res);
+    }
+});

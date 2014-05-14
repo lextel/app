@@ -10,11 +10,6 @@ class UserController extends \BaseController {
     {
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
-        $imei = trim(Input::get('imei', ''));
-        if (empty($imei)){
-            $res = ['code'=>1, 'msg'=>'非手机平台登录，不能操作'];
-            return Response::json($res);
-        }
         //验证输入是否符合格式
         $member = new Member();
         $validator = $member->validateSignIn($username, $password);
@@ -42,13 +37,12 @@ class UserController extends \BaseController {
             return Response::json($res);
         }
         //登录
-        //Auth::login($user);
         $token = new TokenClass;
         $apptoken = $token->create($user);
         //结算本次登录的机器的 功能需要剥离下
         $logs = Applog::select('id', 'award')
                             ->where('imei', '=', $imei)
-                            ->where('status', '=', 0)->get()->toArray();
+                            ->where('status', '=', 5)->get()->toArray();
         $addPoints = 0;
         $ids = [];
         //这地方需要改进下//更改日志记录-减少请求次数
@@ -56,7 +50,7 @@ class UserController extends \BaseController {
             $addPoints += intval($index['award']);
             $ids[] = $index['id'];
             $log = Applog::find($index['id']);
-            $log->status = 1;
+            $log->status = 6;
             $log->member_id = $user->id;
             $log->username = $user->username;
             $log->save();
@@ -111,26 +105,40 @@ class UserController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'用户不存在'];
             return Response::json($res);
         }
-        Auth::login($user);
         $res = ['code'=>0, 'msg'=>'注册成功'];
         return Response::json($res);
     }
-
+    
     /**
-     *
+     * 获得用户信息
+     */
+    public function userInfo()
+    {
+        $token = trim(Input::get('token', ''));
+        $tokenClass = new TokenClass;
+        $memberInfo = $tokenClass->check($token);
+        if (! $memberInfo) {
+            $res = ['code'=>1, 'msg'=>'TOKEN错误'];
+            return Response::json($res);
+        }
+        $data = ['username'=>$memberInfo->username,
+                'nickname'=>$memberInfo->nickname,
+                'avatar'=>$memberInfo->avatar];
+        $res = ['code'=>0, 'msg'=>'OK', 'data'=>$data];
+        return Response::json($res);
+    }
+    
+    /**
      *退出登录
-     *
-     *
      */
     public function signOut()
     {
-        //检测TOKEN
         $token = trim(Input::get('token', ''));
-        if (empty($token)){
-            $res = ['code'=>1, 'msg'=>'请输入TOKEN'];
-            return Response::json($res);
-        };
         $tokenClass = new TokenClass;
+        if (! $tokenClass->check($token)) {
+            $res = ['code'=>1, 'msg'=>'TOKEN错误'];
+            return Response::json($res);
+        }
         $tokenClass->delete($token);
         $res = ['code'=>0, 'msg'=>'退出成功'];
         return Response::json($res);

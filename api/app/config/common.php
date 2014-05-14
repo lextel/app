@@ -5,5 +5,6 @@ return [
 
     'imgHost' => 'http://dev_img.lltao.com/', //图片服务器HOST
 
-    'urlHost' => 'http://dev_img.lltao.com/', //网站APK服务器HOST
+    'apkHost' => 'http://dev_img.lltao.com/download/app/', //网站APK服务器HOST
+
 ];

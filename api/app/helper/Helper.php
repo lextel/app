@@ -14,7 +14,7 @@ class Helper{
         //读取配置
         switch ($type){
             case 'link':
-                $host = Config::get('common.urlHost', '');
+                $host = Config::get('common.apkHost', '');
                 break;
             case 'img':
                 $host = Config::get('common.imgHost', '');

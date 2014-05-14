@@ -17,6 +17,7 @@ class AppsController extends \BaseController {
         }
         //先检测本机现有的已经安装了的APP，并记录到表
         if (empty($installedApps)) $installedApps = [];
+        //
         foreach($installedApps as $app){
             Appexist::firstOrCreate(['package'=>$app, 'imei'=>$imei]);
         }
@@ -37,6 +38,7 @@ class AppsController extends \BaseController {
                     ->where('is_delete', '=', '0')
                     ->where('status', '=', '1')
                     ->get()->toArray();
+        Log::Info(count($apps));
         foreach($apps as &$row){
              $images = [];
              foreach(unserialize($row['images']) as $img){

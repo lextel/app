@@ -60,7 +60,8 @@ class UserController extends \BaseController {
                 'member_id' => $user->id,
             ]);
             }
-        $res = ['code'=>0, 'msg'=>'登录成功', 'token'=>$apptoken];
+        $data = ['token'=>$apptoken];
+        $res = ['code'=>0, 'msg'=>'登录成功', 'data'=>$data];
         return Response::json($res);
     }
 

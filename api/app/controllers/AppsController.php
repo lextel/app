@@ -12,7 +12,7 @@ class AppsController extends \BaseController {
         $imei = trim(Input::get('imei', ''));
         $installedApps = Input::get('apps');
         if (!is_array($installedApps)){
-             $res = ['code'=>1, 'msg'=>'apps是必须的，或者不能为空'];
+             $res = ['code'=>1, 'msg'=>'app格式必须为[]'];
             return Response::json($res);
         }
         //先检测本机现有的已经安装了的APP，并记录到表
@@ -38,7 +38,13 @@ class AppsController extends \BaseController {
                     ->where('status', '=', '1')
                     ->get()->toArray();
         foreach($apps as &$row){
-             $row['images'] = unserialize($row['images']);
+             $images = [];
+             foreach(unserialize($row['images']) as $img){
+                $images[] = Helper::urlPro($img, 'img');
+             }
+             $row['images'] = $images;
+             $row['link'] = Helper::urlPro($row['link']);
+             $row['icon'] = Helper::urlPro($row['icon'], 'img');
         }
 
         $data = ['apps'=>$apps, 'count'=>count($apps)];

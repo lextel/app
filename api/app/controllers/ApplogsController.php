@@ -170,8 +170,8 @@ class ApplogsController extends \BaseController {
         //302跳转
         $url = Helper::urlPro($appInfo->link);
         return Redirect::to($url);
-        //$res = ['code'=>0, 'msg'=>'', 'url'=>$url];
-        //return Response::json($res);
+        $res = ['code'=>0, 'msg'=>'', 'url'=>$url];
+        return Response::json($res);
     }
     
 }

@@ -10,6 +10,7 @@ class UserController extends \BaseController {
     {
         $username = trim(Input::get('username'));
         $password = trim(Input::get('password'));
+        $imei = trim(Input::get('imei'));
         //验证输入是否符合格式
         $member = new Member();
         $validator = $member->validateSignIn($username, $password);
@@ -123,7 +124,7 @@ class UserController extends \BaseController {
         }
         $data = ['username'=>$memberInfo->username,
                 'nickname'=>$memberInfo->nickname,
-                'avatar'=>$memberInfo->avatar];
+                'avatar'=>Helper::urlPro($memberInfo->avatar)];
         $res = ['code'=>0, 'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }

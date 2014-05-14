@@ -13,17 +13,7 @@ class UserController extends \BaseController {
         $imei = trim(Input::get('imei'));
         //验证输入是否符合格式
         $member = new Member();
-        $validator = $member->validateSignIn($username, $password);
-        if ($validator->fails()){
-            $msg = '';
-            $messages = $validator->messages();
-            foreach ($messages->all(':message') as $message){
-                $msg = $message;
-                break;
-            }
-            $res = ['code'=>1, 'msg'=>$msg];
-            return Response::json($res);
-        }
+        
         //验证用户是否在数据库
         $user = Member::where('username', '=', $username)
                       ->where('is_disable', '=', 0)
@@ -124,7 +114,8 @@ class UserController extends \BaseController {
         }
         $data = ['username'=>$memberInfo->username,
                 'nickname'=>$memberInfo->nickname,
-                'avatar'=>Helper::urlPro($memberInfo->avatar)];
+                'avatar'=>Helper::urlPro($memberInfo->avatar),
+                'points'=>$memberInfo->points];
         $res = ['code'=>0, 'msg'=>'OK', 'data'=>$data];
         return Response::json($res);
     }

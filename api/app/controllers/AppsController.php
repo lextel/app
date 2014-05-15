@@ -17,7 +17,7 @@ class AppsController extends \BaseController {
         }
         //先检测本机现有的已经安装了的APP，并记录到表
         if (empty($installedApps)) $installedApps = [];
-        //
+        //这处性能需要改动下
         foreach($installedApps as $app){
             Appexist::firstOrCreate(['package'=>$app, 'imei'=>$imei]);
         }
@@ -38,7 +38,7 @@ class AppsController extends \BaseController {
                     ->where('is_delete', '=', '0')
                     ->where('status', '=', '1')
                     ->get()->toArray();
-        Log::info(count($apps));
+        //Log::info(count($apps));
         foreach($apps as &$row){
              $images = [];
              foreach(unserialize($row['images']) as $img){

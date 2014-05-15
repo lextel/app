@@ -53,14 +53,13 @@ class ApplogsController extends \BaseController {
         $imei = trim(Input::get('imei', ''));
         $package = trim(Input::get('package', ''));
         $action = trim(Input::get('action', ''));
-        
+        $token = trim(Input::get('token', ''));
         $type = ['download'=> 0, 'downloaded'=> 2, 'install'=> 3, 'execute'=> 4, 'completed'=> 5];
         if (empty($action) or (!array_key_exists($action, $type))){
             $res = ['code'=>1, 'msg'=>'不存在该ACTION'];
             return Response::json($res);
         }
         $status = $type[$action];
-        Log::info('这里事状态'.$status);
         //检测该APPID是否存在
         $appInfo = Apps::where('package', '=', $package)
                       ->where('is_delete', '=', 0)
@@ -89,8 +88,8 @@ class ApplogsController extends \BaseController {
                 'imei' => $imei,
                 'status' => $status,
                 'award' => 0,
-                'member_id' => '',
-                'username' => 0,
+                'member_id' => 0,
+                'username' => '',
                 ]);
             $res = ['code'=>0,'msg'=>'OK'];
             return Response::json($res);
@@ -98,8 +97,8 @@ class ApplogsController extends \BaseController {
         //结算
         $award = $appInfo->award;
         //已登录
-        $token = new TokenClass;
-        $user = $token->check();
+        $tokenclass = new TokenClass;
+        $user = $tokenclass->check($token);
         //记录日志
         Appexist::firstOrCreate(['package'=>$appInfo->package, 'imei'=>$imei]);
         $app = Applog::firstOrCreate([
@@ -115,6 +114,7 @@ class ApplogsController extends \BaseController {
         $app->save();
         //登录了立马结算
         if ($user){
+        
             $user->points += intval($award);
             $user->save();
             //记录明细
@@ -169,9 +169,9 @@ class ApplogsController extends \BaseController {
                 ]);
         //302跳转
         $url = Helper::urlPro($appInfo->link);
-        return Redirect::to($url);
-        $res = ['code'=>0, 'msg'=>'', 'url'=>$url];
-        return Response::json($res);
+        return Redirect::away($url);
+        //$res = ['code'=>0, 'msg'=>'', 'url'=>$url];
+        //return Response::json($res);
     }
     
 }

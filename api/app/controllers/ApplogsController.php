@@ -148,16 +148,16 @@ class ApplogsController extends \BaseController {
             return Response::json($res);
         }
         //检测该APPID在该IMEI上是否使用过
-        $appLog = Applog::where('app_id', '=', $id)
+        /*$appLog = Applog::where('app_id', '=', $id)
                       ->where('imei', '=', $imei)
                       ->where('status', '=', 0)
                       ->first();
         //没有则新建立个
-        /*if (! $appLog){           
+        if (! $appLog){           
             $res = ['code'=>1, 'msg'=>'不能直接跳过点击下载'];
             return Response::json($res);
         }*/
-        $appLog = Applog::firstOrCreate([
+        $appLog = Applog::create([
                 'app_id' => $appInfo->id,
                 'package' => $appInfo->package,
                 'title' => $appInfo->title,
@@ -171,7 +171,7 @@ class ApplogsController extends \BaseController {
         $url = Helper::urlPro($appInfo->link);
         //return Redirect::away($url);
         //文件流输出
-        $file = @ fopen($url, "r");
+        /*$file = @ fopen($url, "r");
         if ($file) {
             Header("Content-type: application/octet-stream");
             Header("Content-Disposition: attachment; filename=" . $appInfo->link);
@@ -179,9 +179,9 @@ class ApplogsController extends \BaseController {
                 echo fread($file,50000);
         }
         fclose($file);
-        }
-        //$res = ['code'=>0, 'msg'=>'', 'url'=>$url];
-        //return Response::json($res);
+        }*/
+        $res = ['code'=>0, 'msg'=>'', 'url'=>$url];
+        return Response::json($res);
     }
     
 }

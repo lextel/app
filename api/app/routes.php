@@ -28,7 +28,7 @@ Route::group(['prefix' => '/'], function() {
     Route::get('signout', ['before' => 'imei|token', 'uses' => 'UserController@signOut']);
     Route::get('userinfo', ['before' => 'imei|token', 'uses' => 'UserController@userInfo']);
 });
-Route::get('applog', ['before' => 'imei', 'uses' =>'ApplogsController@index']);
+Route::get('applog', ['before' => '', 'uses' =>'ApplogsController@index']);
 //Route::post('applog', ['before' => 'postForm|imei', 'uses' => 'ApplogsController@create']);
 
 Route::post('apps', ['before' => 'postForm|imei', 'uses' => 'AppsController@index']);

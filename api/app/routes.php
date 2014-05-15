@@ -16,29 +16,20 @@ header("Access-Control-Allow-Origin: *");
 
 Route::get('/', function()
 {
-    return View::make('hello');
+    $res = ['code'=>0, 'msg'=>'欢迎来到乐乐淘'];
+    return Response::json($res);
 });
 
 Route::group(['prefix' => '/'], function() {
     //用户注册\登录功能
-    //Route::get('signin', 'UserController@getSignIn');
     Route::post('signin', ['before' => 'postForm|imei', 'uses' => 'UserController@signIn']);
-    //Route::get('signup', 'UserController@getSignUp');
-    //Route::post('signup', 'UserController@signUp');
     Route::get('signout', ['before' => 'imei|token', 'uses' => 'UserController@signOut']);
     Route::get('userinfo', ['before' => 'imei|token', 'uses' => 'UserController@userInfo']);
+
 });
-Route::get('applog', ['before' => '', 'uses' =>'ApplogsController@index']);
-//Route::post('applog', ['before' => 'postForm|imei', 'uses' => 'ApplogsController@create']);
 
 Route::post('apps', ['before' => 'postForm|imei', 'uses' => 'AppsController@index']);
-
 Route::get('amount', ['before' => 'imei', 'uses' =>'AppsController@amount']);
-
-//Route::get('operate', ['before' => 'imei', 'uses' =>'ApplogsController@download']);
+Route::get('applog', ['before' => '', 'uses' =>'ApplogsController@index']);
 Route::post('operate', ['before' => 'postForm|imei', 'uses' =>'ApplogsController@operate']);
 
-Event::listen('illuminate.query', function($sql)
-{
-   Log::info($sql);
-});

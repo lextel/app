@@ -38,7 +38,6 @@ class AppsController extends \BaseController {
                     ->where('is_delete', '=', '0')
                     ->where('status', '=', '1')
                     ->get()->toArray();
-        //Log::info(count($apps));
         foreach($apps as &$row){
              $images = [];
              foreach(unserialize($row['images']) as $img){

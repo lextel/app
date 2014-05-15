@@ -21,7 +21,7 @@ class ApplogsController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'请登陆'];
             return Response::json($res);
         }
-        $pn = trim(Input::get('pn', 0));
+        $pn = intval(Input::get('pn', 0));
         $userId = $user->id;
         $count = Applog::where('member_id', '=', $userId)->count();
         $logs = [];
@@ -34,8 +34,8 @@ class ApplogsController extends \BaseController {
                 ->get()->toArray();
         }
         foreach($logs as &$row){
-             //$row['created_at'] = date("Y-m-d H:i", $row['created_at']);
-            $row['created_at'] = $row['created_at'];
+            $row['created_at'] = date("Y-m-d H:i", $row['created_at']);
+            //$row['created_at'] = $row['created_at'];
         }
         $data = ['logs'=>$logs, 'count'=>$count];
         $res = ['code'=>0, 'msg'=>'OK', 'data'=>$data];
@@ -68,18 +68,7 @@ class ApplogsController extends \BaseController {
         if (empty($appInfo)){
             $res = ['code'=>1, 'msg'=>'不存在该APP'];
             return Response::json($res);
-        }
-        /*//检测是否执行过前面的步骤
-        if ($status > 0){
-            $appLog = Applog::where('package', '=', $package)
-                      ->where('imei', '=', $imei)
-                      ->where('status', '=', $status - 1)
-                      ->first();
-            if (!$appLog){
-                $res = ['code'=>1, 'msg'=>'该操作的上一级操作不能跳过'];
-                return Response::json($res);
-            }
-        }*/        
+        }       
         if ($status != 5){
             $appLog = Applog::create([
                 'app_id' => $appInfo->id,

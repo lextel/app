@@ -77,5 +77,15 @@ App::down(function()
 | definitions instead of putting them all in the main routes file.
 |
 */
+Event::listen('illuminate.query', function($sql)
+{
+    Log::info($sql);
+});
+
+App::missing(function($exception)
+{
+    $res = ['code'=>1, 'msg'=>'你要打开的操作不存在'];
+    return Response::json($res);
+});
 
 require app_path().'/filters.php';

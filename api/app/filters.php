@@ -13,13 +13,13 @@
 
 App::before(function($request)
 {
-    Log::info($request);
+    //Log::info($request);
 });
 
 
 App::after(function($request, $response)
 {
-    Log::info($response);
+    //Log::info($response);
 });
 
 /*
@@ -86,6 +86,10 @@ Route::filter('postForm', function()
     if (empty($imei)){
         $rawpostdata = file_get_contents("php://input");
         $post = json_decode($rawpostdata, true);
+        if (!is_array($post)){
+            $res = ['code'=>1, 'msg'=>'form-data数据必须为字典形式的字符串'];
+            return Response::json($res);
+        }
         Input::merge($post);
     }
 });
@@ -99,7 +103,7 @@ Route::filter('imei', function()
         return Response::json($res);
     }
 });
-//
+//检测是否带登录TOKEN
 Route::filter('token', function()
 {
     $token = trim(Input::get('token', ''));

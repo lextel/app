@@ -168,9 +168,9 @@ class ApplogsController extends \BaseController {
                 ]);
         //302跳转
         $url = Helper::urlPro($appInfo->link);
-        //return Redirect::away($url);
+        return Redirect::away($url);
         //文件流输出
-        $file = @ fopen($url, "r");
+        /*$file = @ fopen($url, "r");
         if ($file) {
             Header("Content-type: application/octet-stream");
             Header("Content-Disposition: attachment; filename=" . $appInfo->link);
@@ -178,7 +178,7 @@ class ApplogsController extends \BaseController {
                 echo fread($file,50000);
         }
         fclose($file);
-        }
+        }*/
         //$res = ['code'=>0, 'msg'=>'', 'url'=>$url];
         //return Response::json($res);
     }

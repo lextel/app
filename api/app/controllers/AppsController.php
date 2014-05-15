@@ -45,7 +45,7 @@ class AppsController extends \BaseController {
                 $images[] = Helper::urlPro($img, 'img');
              }
              $row['images'] = $images;
-             $row['link'] = Helper::urlPro($row['link']);
+             $row['link'] = Helper::linkPro($row);
              $row['icon'] = Helper::urlPro($row['icon'], 'img');
         }
 

@@ -7,4 +7,5 @@ return [
 
     'apkHost' => 'http://dev_www.lltao.com/download/app/', //网站APK服务器HOST
 
+    'linkHost' => 'http://192.168.3.10:85/operate', //
 ];

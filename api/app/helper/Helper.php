@@ -26,6 +26,17 @@ class Helper{
         $url = $host.$url;
         return $url;
     }
+    
+    /*
+    * link 补全
+    */
+    public static function linkPro($row)
+    {
+        //判断是否带http, https
+        $host = Config::get('common.linkHost');             
+        $url = $host . '?id=' . $row['id'];
+        return $url;
+    }
 }
 
 ?>

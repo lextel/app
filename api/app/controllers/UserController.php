@@ -31,7 +31,7 @@ class UserController extends \BaseController {
         $token = new TokenClass;
         $apptoken = $token->create($user);
         //结算本次登录的机器的 功能需要剥离下
-        $logs = Applog::select('id', 'award')
+        $logs = Awardlog::select('id', 'award')
                             ->where('imei', '=', $imei)
                             ->where('status', '=', 5)->get()->toArray();
         $addPoints = 0;
@@ -40,7 +40,7 @@ class UserController extends \BaseController {
         foreach($logs as $index){
             $addPoints += intval($index['award']);
             $ids[] = $index['id'];
-            $log = Applog::find($index['id']);
+            $log = Awardlog::find($index['id']);
             $log->status = 6;
             $log->member_id = $user->id;
             $log->username = $user->username;

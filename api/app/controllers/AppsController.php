@@ -59,9 +59,9 @@ class AppsController extends \BaseController {
     public function amount()
     {
         $imei = trim(Input::get('imei', ''));
-        $logs = Applog::select('id', 'award')
+        $logs = Awardlog::select('id', 'award')
                             ->where('imei', '=', $imei)
-                            ->where('status', '=', 0)->get()->toArray();
+                            ->where('status', '=', 5)->get()->toArray();
         $amount = 0;
         foreach($logs as $index){
             $amount += $index['award'];

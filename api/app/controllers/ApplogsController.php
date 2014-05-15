@@ -23,10 +23,10 @@ class ApplogsController extends \BaseController {
         }
         $pn = intval(Input::get('pn', 0));
         $userId = $user->id;
-        $count = Applog::where('member_id', '=', $userId)->count();
+        $count = Awardlog::where('member_id', '=', $userId)->count();
         $logs = [];
         if ($count > $pn){
-            $logs = Applog::select('id', 'title', 'award', 'created_at')
+            $logs = Awardlog::select('id', 'title', 'award', 'created_at')
                 ->where('member_id', '=',$userId)
                 ->orderBy('id', 'desc')
                 ->take($this->page_size)
@@ -69,18 +69,28 @@ class ApplogsController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'不存在该APP'];
             return Response::json($res);
         }       
+        //记录操作
+        $appLog = Applog::create([
+            'app_id' => $appInfo->id,
+            'package' => $appInfo->package,
+            'title' => $appInfo->title,
+            'imei' => $imei,
+            'status' => $status,
+            'award' => 0,
+            'member_id' => 0,
+            'username' => '',
+            ]);
         if ($status != 5){
-            $appLog = Applog::create([
-                'app_id' => $appInfo->id,
-                'package' => $appInfo->package,
-                'title' => $appInfo->title,
-                'imei' => $imei,
-                'status' => $status,
-                'award' => 0,
-                'member_id' => 0,
-                'username' => '',
-                ]);
             $res = ['code'=>0,'msg'=>'OK'];
+            return Response::json($res);
+        }
+        //检查是否已经结算过了
+        $log = Awardlog::where('package', '=', $package)
+                      ->where('imei', '=', $imei)
+                      ->where('status', '=', '6')
+                      ->first();
+        if ($log){
+            $res = ['code'=>1, 'msg'=>'已经操作过了'];
             return Response::json($res);
         }
         //结算
@@ -88,21 +98,19 @@ class ApplogsController extends \BaseController {
         //已登录
         $tokenclass = new TokenClass;
         $user = $tokenclass->check($token);
-        //记录日志
-        Appexist::firstOrCreate(['package'=>$appInfo->package, 'imei'=>$imei]);
-        $app = Applog::firstOrCreate([
+        //奖励日志
+        $log = Awardlog::firstOrCreate([
                 'app_id' => $appInfo->id,
                 'package' => $appInfo->package,
                 'title' => $appInfo->title,
                 'imei' => $imei,
-                'award' => $award
+                'award' => $award,
+                'status' => 5,
                 ]);
-        $app->status = $user ? 6 : 5;
-        $app->member_id = $user ? $user->id : '';
-        $app->username = $user ? $user->username : '';
-        $app->save();
+        //记录使用
+        Appexist::firstOrCreate(['package'=>$appInfo->package, 'imei'=>$imei]);
         //登录了立马结算
-        if ($user){       
+        if ($user){           
             $user->points += intval($award);
             $user->save();
             //记录明细
@@ -114,7 +122,13 @@ class ApplogsController extends \BaseController {
                 'source'    => 'APP下载',
                 'member_id' => $user->id,
             ]);
-        }       
+            $log->status = 6;
+            $log->member_id = $user->id;
+            $log->username = $user->username;
+            $log->save();
+            $res = ['code'=>0,'msg'=>'OK'];
+            return Response::json($res);
+        }
         $res = ['code'=>0,'msg'=>'OK'];
         return Response::json($res);
     }

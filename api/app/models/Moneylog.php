@@ -10,9 +10,12 @@ class Moneylog extends Eloquent  {
      */
     protected $table = 'member_moneylogs';
 
-    protected $fillable = ['id', 'phase_id', 'total', 'sum', 
-                            'type', 'source', 'member_id', 'created_at', 
+    protected $fillable = ['id', 'phase_id', 'total', 'sum',
+                            'type', 'source', 'member_id', 'created_at',
                             'updated_at'];
 
-    public $timestamps = false;    
+    //
+    protected function getDateFormat(){
+        return time();
+    }
 }

@@ -31,7 +31,7 @@ ClassLoader::addDirectories(array(
 |
 */
 
-Log::useFiles(storage_path().'/logs/laravel.log');
+Log::useFiles(storage_path().'/logs/'.date('Y-m-d', time()).'.laravel.log');
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +45,12 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 | shown, which includes a detailed stack trace during debug.
 |
 */
-
+//其他错误
 App::error(function(Exception $exception, $code)
 {
     Log::error($exception);
+    $res = ['code'=>1, 'msg'=>'服务器小憩下，稍后就回来。。。'];
+    return Response::json($res);
 });
 
 /*
@@ -77,11 +79,12 @@ App::down(function()
 | definitions instead of putting them all in the main routes file.
 |
 */
+//SQL日志
 Event::listen('illuminate.query', function($sql)
 {
     Log::info($sql);
 });
-
+//404
 App::missing(function($exception)
 {
     $res = ['code'=>1, 'msg'=>'你要打开的操作不存在'];

@@ -35,7 +35,7 @@ Route::post('apps', ['before' => 'postForm|imei', 'uses' => 'AppsController@inde
 
 Route::get('amount', ['before' => 'imei', 'uses' =>'AppsController@amount']);
 
-Route::get('download', ['before' => 'imei', 'uses' =>'ApplogsController@download']);
+Route::get('operate', ['before' => 'imei', 'uses' =>'ApplogsController@download']);
 Route::post('operate', ['before' => 'postForm|imei', 'uses' =>'ApplogsController@operate']);
 
 Event::listen('illuminate.query', function($sql)

@@ -69,7 +69,7 @@ class ApplogsController extends \BaseController {
             $res = ['code'=>1, 'msg'=>'不存在该APP'];
             return Response::json($res);
         }
-        //检测是否执行过前面的步骤
+        /*//检测是否执行过前面的步骤
         if ($status > 0){
             $appLog = Applog::where('package', '=', $package)
                       ->where('imei', '=', $imei)
@@ -79,9 +79,9 @@ class ApplogsController extends \BaseController {
                 $res = ['code'=>1, 'msg'=>'该操作的上一级操作不能跳过'];
                 return Response::json($res);
             }
-        }        
+        }*/        
         if ($status != 5){
-            $appLog = Applog::firstOrCreate([
+            $appLog = Applog::create([
                 'app_id' => $appInfo->id,
                 'package' => $appInfo->package,
                 'title' => $appInfo->title,
@@ -113,8 +113,7 @@ class ApplogsController extends \BaseController {
         $app->username = $user ? $user->username : '';
         $app->save();
         //登录了立马结算
-        if ($user){
-        
+        if ($user){       
             $user->points += intval($award);
             $user->save();
             //记录明细
@@ -171,7 +170,7 @@ class ApplogsController extends \BaseController {
         $url = Helper::urlPro($appInfo->link);
         //return Redirect::away($url);
         //文件流输出
-        /*$file = @ fopen($url, "r");
+        $file = @ fopen($url, "r");
         if ($file) {
             Header("Content-type: application/octet-stream");
             Header("Content-Disposition: attachment; filename=" . $appInfo->link);
@@ -179,9 +178,9 @@ class ApplogsController extends \BaseController {
                 echo fread($file,50000);
         }
         fclose($file);
-        }*/
-        $res = ['code'=>0, 'msg'=>'', 'url'=>$url];
-        return Response::json($res);
+        }
+        //$res = ['code'=>0, 'msg'=>'', 'url'=>$url];
+        //return Response::json($res);
     }
     
 }

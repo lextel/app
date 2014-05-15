@@ -5,7 +5,7 @@ return [
 
     'imgHost' => 'http://dev_www.lltao.com/', //图片服务器HOST
 
-    'apkHost' => 'http://dev_www.lltao.com/download/app/', //网站APK服务器HOST
+    'apkHost' => 'http://192.168.3.10:86/download/app/', //网站APK服务器HOST
 
     'linkHost' => 'http://192.168.3.10:85/operate', //
 ];

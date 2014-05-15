@@ -153,10 +153,10 @@ class ApplogsController extends \BaseController {
                       ->where('status', '=', 0)
                       ->first();
         //没有则新建立个
-        if (! $appLog){           
+        /*if (! $appLog){           
             $res = ['code'=>1, 'msg'=>'不能直接跳过点击下载'];
             return Response::json($res);
-        }
+        }*/
         $appLog = Applog::firstOrCreate([
                 'app_id' => $appInfo->id,
                 'package' => $appInfo->package,
@@ -172,10 +172,7 @@ class ApplogsController extends \BaseController {
         //return Redirect::away($url);
         //文件流输出
         $file = @ fopen($url, "r");
-        if (!$file) {
-            $res = ['code'=>1, 'msg'=>'', 'url'=>$url];
-            return Response::json($res);
-        } else {
+        if ($file) {
             Header("Content-type: application/octet-stream");
             Header("Content-Disposition: attachment; filename=" . $appInfo->link);
             while (!feof ($file)) {

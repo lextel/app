@@ -13,13 +13,13 @@
 
 App::before(function($request)
 {
-    //Log::info($request);
+    Log::info($request);
 });
 
 
 App::after(function($request, $response)
 {
-    //Log::info($response);
+    Log::info($response);
 });
 
 /*

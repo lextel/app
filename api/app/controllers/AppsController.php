@@ -19,7 +19,11 @@ class AppsController extends \BaseController {
         if (empty($installedApps)) $installedApps = [];
         //这处性能需要改动下
         foreach($installedApps as $app){
-            Appexist::firstOrCreate(['package'=>$app, 'imei'=>$imei]);
+            //过滤掉安卓系统自身的
+            preg_match("/^com.android.*$/", $app, $matches);
+            if (!$matches){
+                Appexist::firstOrCreate(['package'=>$app, 'imei'=>$imei]);
+            }        
         }
         //检测是否已经安装了
         $apps = Appexist::select('package')
@@ -29,7 +33,7 @@ class AppsController extends \BaseController {
         foreach ($apps as $index) {
             $logsTmp[] = $index['package'];
         }
-        //获得剩余的
+        //获得剩余的,2LIST做并集去重处理
         $logs = array_unique(array_merge($logsTmp, $installedApps));
         $apps = [];
         if (empty($logs)) $logs = [0];

@@ -1,0 +1,21 @@
+<ion-view title="APP下载记录">
+  <ion-content class="has-header padding">
+    <div class="list list-inset">
+        <ion-item class="item item-log"  ng-repeat="log in logs" type="item-text-wrap">
+            <h2>{{log.title}}</h2>
+            <p>完成<i>+{{log.award}}</i></p>
+        </ion-item>
+    </div>
+  </ion-content>
+</ion-view>
+<style>
+    .item-log h2 {
+        float:left;
+        width: 65%
+    }
+    .item-log p {
+        float:right; 
+        width: 35%;
+        text-align: right;
+    }
+</style>

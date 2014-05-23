@@ -1,0 +1,43 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'firend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view title="<img class='logo' src='img/logo.png'/>">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-positive" href="#/tab/account">
+      <dl class="point">
+          <dd class="yuanbao" id="yuanbao">0元宝</dd>
+          <dd class="yinbi" id="yinbi">0银币</dd>
+        </dl>
+    </button>
+  </ion-nav-buttons>
+  <ion-content has-header="true" padding="true">
+    <div class="app-card">
+        <div class="item item-appinfo">
+            <img src="{{app.icon}}">
+            <h2>{{app.title}}</h2>
+            <p>{{app.size}}</p>
+            <button class="button button-assertive button-download" ng-click="download()" ng-if="down">立即下载</button>
+            <button class="button button-assertive button-download" ng-if="downing">下载中...</button>
+            <button class="button button-assertive button-download" ng-click="doInstall()" ng-if="install">立即安装</button>
+            <button class="button button-assertive button-download" ng-if="insting">安装中...</button>
+            <button class="button button-assertive button-download" ng-click="execute()" ng-if="exec">立即运行</button>
+        </div>
+        <div class="item item-body">
+            <div class="item item-text-wrap app-tips">
+               <i class="icon ion-ios7-information-outline"></i><span style="margin-left: 5px;font-size: 12px;">下载安装并运行30秒，即可获得{{app.award}}银币</span>
+            </div>
+            <h3>简介</h3>
+            <p id="summary">
+               {{app.summary}}
+            </p>
+            <p id="sbtn" ng-click="op()" >展开所有</p>
+            <div class="row">
+                <div class="col col-30" ng-repeat="image in app.images"><img class="full-image" src="{{image}}"></div>
+            </div>
+        </div>
+    </div>
+  </ion-content>
+</ion-view>

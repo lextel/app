@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="utils" version="1.0">
+    <name>utils</name>
+    <author>weelion</author>
+    <description>utils</description>
+    <keywords>cordova, utils</keywords>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/utils.js" name="Utils">
+        <clobbers target="utils" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Utils">
+                <param name="android-package" value="so.doo.app.plugins.Utils" />
+            </feature>
+        </config-file>
+        <source-file src="src/android/Utils.java" target-dir="src/so/doo/app/plugins" />
+    </platform>
+</plugin>

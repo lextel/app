@@ -1,0 +1,25 @@
+<ion-view title="<img class='logo' src='img/logo.png'/>">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-positive" href="#/tab/account">
+      <dl class="point">
+          <dd class="yuanbao" id="yuanbao">0元宝</dd>
+          <dd class="yinbi" id="yinbi">0银币</dd>
+        </dl>
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="has-header" overflow-scroll="false">
+    <div id="banner">
+        <a href="#" class="banner"><img src="img/banner.jpg"/></a>
+    </div>
+    <ion-list>
+    <ion-item class="col col-50 item item-app app" ng-repeat="app in apps" type="item-text-wrap" href="#/tab/app/{{$index}}">
+        <img src="{{app.icon}}">
+        <h2>{{app.title}}</h2>
+        <p>完成<i>+{{app.award}}银币</i></p>
+    </ion-item>
+    <ion-item class="item-app-empty" ng-show="empty">
+        真厉害，您已经装完所有应用啦！
+    </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

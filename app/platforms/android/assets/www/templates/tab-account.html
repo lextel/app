@@ -1,0 +1,33 @@
+<ion-view title="个人中心">
+  <ion-content class="has-header padding">
+    <div class="list list-inset" ng-show="!login">
+      <label class="item item-input">
+        <input id="username" type="text" placeholder="邮箱/手机">
+      </label>
+      <label class="item item-input">
+        <input id="password" type="password" placeholder="密码">
+      </label>
+       <button class="button button-block button-assertive" ng-click="doLogin()">
+          登&emsp;陆
+      </button>
+    </div>
+    <div class="list card" ng-show="login">
+        <div class="item item-avatar user-avatar">
+          <div class="myavatar">
+            <img id="avatar" src="img/defaultavatar.jpg">
+          </div>
+          <p id="email"></p>
+          <p id="nickname">昵称：</p>
+          <p id="points">财富：</p>
+        </div>
+        <div class="list" style="margin-top: 15px" >
+          <a class="item" href="#/tab/log">
+            我的APP下载记录
+          </a>
+        </div>        
+        <button class="button button-block button-assertive" style="margin-top: 15px" ng-click="logout()">
+          登&emsp;出
+        </button>
+    </div>
+  </ion-content>
+</ion-view>

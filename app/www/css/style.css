@@ -1,0 +1,244 @@
+/* Empty. Add your own CSS if you like */
+/*------------------------------
+|  HACK
+-------------------------------*/
+html {
+    background: #d40f1a;  /* 没有效 */
+}
+/*------------------------------
+|  TAB
+-------------------------------*/
+.tabs {
+    background: #d40f1a;
+    padding-top: 0;
+}
+.tab-item {
+    background: #d40f1a;
+    max-width: 100%;
+    opacity: 1;
+}
+.tab-title {
+    color: #fff;
+    font-weight: bold;
+}
+
+.tab-item-active {
+    background: #fff;
+}
+
+.tab-apps {
+    background: url('../img/tab/apps_on.png') no-repeat;
+    background-position: center center;
+    background-size: 26px 26px;
+    border-top: 1px solid #d40f1a;
+}
+
+.tab-item-active > .tab-apps {
+    background: url('../img/tab/apps.png') no-repeat;
+    background-position: center center;
+    background-size: 26px 26px;
+    border-top: 1px solid #ccc;
+}
+.tab-user {
+    background: url('../img/tab/user_on.png') no-repeat;
+    background-position: center center;
+    background-size: 26px 26px;
+    border-top: 1px solid #d40f1a;
+}
+
+.tab-item-active > .tab-user {
+    background: url('../img/tab/user.png') no-repeat;
+    background-position: center center;
+    background-size: 26px 26px;
+    border-top: 1px solid #ccc;
+}
+
+.tab-item-active > .tab-title {
+    color: #d40f1a;
+    font-weight: bold;
+}
+
+/*------------------------------
+|  NAV BAR
+-------------------------------*/
+ion-nav-bar {
+    background-color: #d40f1a !important;
+    color: #fff !important;
+}
+ion-nav-bar h1 {
+    color: #fff !important;
+}
+.nav-back {
+    background: url('../img/icon/back.png') no-repeat !important;
+    background-position: center center;
+    background-size: 31px 31px !important;
+    width: 32px;
+    height: 32px;
+}
+.logo {
+    height: 30px;
+    margin-top: 7px;
+}
+.point {
+    font-size: 12px;
+    color: #fff;
+    text-align: right;
+}
+.yuanbao::before { 
+    content: '';
+    padding-left: 16px;
+    background: url('../img/icon/yuanbao.png') no-repeat;
+    background-size: 13px 13px;
+}
+.yinbi::before { 
+    content: '';
+    padding-left: 16px;
+    background: url('../img/icon/yinbi.png') no-repeat;
+    background-size: 11px 11px;
+}
+/*------------------------------
+|  BANNER
+-------------------------------*/
+.banner {
+    display: block;
+    background: #45CCEA;
+    text-align: center;
+}
+.banner img {
+    height: 100px;
+}
+/*------------------------------
+|  APP LIST
+-------------------------------*/
+.app {
+    float: left;
+    border: none;
+    padding: 0;
+    padding-bottom: 3px;
+    margin-bottom: 1px;
+}
+.app::after {
+    content: "";
+    width: 100%;
+    background: #ccc;
+    position: absolute;
+    height: 1px;
+}
+.app:nth-child(even) {
+    border-left: 1px solid #fff;
+}
+
+.app > a {
+    padding-left: 70px !important;
+    min-height: 70px;
+    padding-right: 15px !important;
+    background: #f5f5f5 !important;
+}
+.app > a:active {
+    background: #fff !important;
+}
+
+.app > a > img {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    border-radius: 4px;
+}
+.app > a > p > i {
+    color: #d40f1a;
+}
+
+.item-app-empty {
+    text-align: center;
+}
+
+/*------------------------------
+|  APP DETAIL
+-------------------------------*/
+.item-appinfo {
+    padding: 0;
+    padding-left: 80px;
+    padding-right: 45px;
+    background: url('../img/app_bg.jpg');
+}
+
+.item-appinfo > img {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    max-width: 58px;
+    max-height: 58px;
+    width: 100%;
+    border-radius: 4px;
+}
+.item-appinfo > h2 {
+    margin-top: 8px;
+    color: #d40f1a;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+.item-appinfo > p {
+    color: #d40f1a;
+}
+.item-appinfo > button {
+    position: absolute;
+    top: 12px;
+    right: 25px;
+    line-height: 32px;
+    min-height: 32px;
+}
+.app-tips {
+    padding: 5px 22px;
+    color: #d40f1a;
+}
+.ion-ios7-information-outline:before {
+    content: "\f1a0";
+    top: 9px;
+    left: 10px;
+    position: absolute;
+}
+
+#summary {
+    height: 80px;
+    overflow: hidden;
+}
+.dsummary {
+    height: 100% !important;
+    overflow:auto !important;
+}
+
+#sbtn {
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+/*------------------------------
+|  ACCOUNT
+-------------------------------*/
+.user-avatar {
+    padding-left: 100px;
+    min-height: 100px;
+}
+.user-avatar > .myavatar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden
+}
+.myavatar img {
+    width: 68px;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 60px;
+}

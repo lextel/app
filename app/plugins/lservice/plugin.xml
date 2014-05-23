@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="lservice" version="1.0">
+    <name>lservice</name>
+    <author>weelion</author>
+    <description>lservice</description>
+    <keywords>cordova, lservice</keywords>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/lservice.js" name="Lservice">
+        <clobbers target="lservice" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Lservice">
+                <param name="android-package" value="so.doo.app.plugins.Lservice" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="so.doo.app.plugins.LltService" android:process=":remote">
+                <intent-filter>  
+                    <action android:name="so.doo.app.plugins.AIDLService"/>  
+                </intent-filter>  
+            </service> 
+        </config-file>
+        <source-file src="src/android/Lservice.java" target-dir="src/so/doo/app/plugins" />
+        <source-file src="src/android/LltService.java" target-dir="src/so/doo/app/plugins" />
+        <source-file src="src/android/Listening.aidl" target-dir="src/so/doo/app/plugins" />
+    </platform>
+</plugin>

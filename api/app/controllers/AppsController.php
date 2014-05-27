@@ -11,6 +11,8 @@ class AppsController extends \BaseController {
     {
         $imei = trim(Input::get('imei', ''));
         $installedApps = Input::get('apps');
+        //默认为安卓
+        $os = trim(Input::get('os', '1'));
         if (!is_array($installedApps)){
              $res = ['code'=>1, 'msg'=>'app格式必须为[]'];
             return Response::json($res);
@@ -41,6 +43,7 @@ class AppsController extends \BaseController {
                     ->whereNotIn('package', $logs)
                     ->where('is_delete', '=', '0')
                     ->where('status', '=', '1')
+                    ->where('os', '=', $os)
                     ->get()->toArray();
         foreach($apps as &$row){
              $images = [];
